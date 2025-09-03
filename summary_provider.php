@@ -1,14 +1,25 @@
 <?php 
 
 function generateSummary() {
-    $post_id = $_POST['post_id'];
+    $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
+
+    if (!current_user_can('edit_posts')) {
+        wp_send_json_error('Insufficient permissions');
+    }
+
     if (empty($post_id)) {
         wp_send_json_error('Post ID is required');
     }
+
     $post = get_post($post_id);
     if (empty($post)) {
         wp_send_json_error('Post not found');
     }
+
+    if ($post->post_type !== 'discussions') {
+        wp_send_json_error('Invalid post type');
+    }
+
     $content = $post->post_content;
     if (empty($content)) {
         wp_send_json_error('Content not found');
@@ -58,8 +69,8 @@ function getAiSummary($content) {
     $result = json_decode($body, true);
 
     if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
-        return  $result['candidates'][0]['content']['parts'][0]['text'];
+        return  esc_html($result['candidates'][0]['content']['parts'][0]['text']);
     }
 
-    return  substr($content, 0, 100) .'....';
+    return  esc_html(substr($content, 0, 100) .'....');
 }
