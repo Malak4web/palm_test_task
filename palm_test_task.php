@@ -10,6 +10,8 @@ License: GPL2
 */
 
 require_once 'meta.php';
+require_once 'summary_provider.php';
+define('GEMINI_API_KEY', 'AIzaSyB8RB6QHZlpnrpUpoO1uM8IMiaMO9_MjwI');
 
 function createCPT() {
     $labels = array(
