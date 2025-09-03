@@ -121,7 +121,11 @@ define('GEMINI_API_KEY', 'your-new-api-key-here');
 **Malak Younan**
 - LinkedIn: [Malak4web](https://www.linkedin.com/in/malaak4web/)
 - GitHub: [Malak4web](https://github.com/Malak4web/)
+- Upwork: [Malak Younan](https://www.upwork.com/freelancers/~016902c320cece15fa)
 
----
+### Previous WordPress Plugins
+I have developed several WordPress plugins available on the official repository:
+- [MK Posts Slider](https://wordpress.org/plugins/mk-posts-slider/) - A responsive posts slider plugin
+- [PDF Flip Book by Kenrys](https://wordpress.org/plugins/pdf-flip-book-by-kenrys/) - Interactive PDF flip book viewer
 
-**Note**: This plugin is designed for the Palm test task and includes a hardcoded API key. For production use, implement proper API key management and security measures.
+**Note**: I have more plugins and projects available on my Upwork profile. Feel free to check out my portfolio for additional work examples.

@@ -19,7 +19,7 @@ function summaryMetaCB($post) {
     $summary = get_post_meta($post->ID, 'summary', true);
     $o = '<button class="button button-primary" id="generate-summary" data-post-id="' . $post->ID . '">Generate Summary</button>';
     if ($summary) {
-        $o .= '<p>Summary:<br> <code>' . esc_html( $summary ). '</code></p>';
+        $o .= '<h4>Summary:</h4> <p style="background-color: #f0f0f0; padding: 10px; border-radius: 5px;">' . esc_html( $summary ). '</p>';
     }
     echo $o;
 
