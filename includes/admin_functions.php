@@ -44,7 +44,7 @@ add_action('admin_init', 'summarySettingsOptions');
 
 
 function summarySettingsSectionCallback() {
-    echo '<p>' . __('Configure the AI summary settings for your community discussions.', 'palmtest') . '</p>';
+    echo '<p>' . esc_html(__('Configure the AI summary settings for your community discussions.', 'palmtest')) . '</p>';
 }
 
 
@@ -61,7 +61,7 @@ function summarySettingsApiKeyCallback() {
     $apiKey = isset($options['apiKey']) ? $options['apiKey'] : '';
     
     echo '<input type="password" id="apiKey" name="palmtestOptions[apiKey]" value="' . esc_attr($apiKey) . '" class="regular-text" />';
-    echo '<p class="description">' . __('Enter your Google Gemini API key.', 'palmtest') . '</p>';
+    echo '<p class="description">' . esc_html(__('Enter your Google Gemini API key.', 'palmtest')) . '</p>';
 }
 
 

@@ -87,7 +87,7 @@ function getAiSummary($content) {
 
     // Handle API errors - Gemini usually gives good error messages
     if (isset($result['error']['message'])) {
-        return [ 'error' => 'Error: ' . esc_html(strip_tags($result['error']['message'])) ];
+        return [ 'error' => 'Error: ' . esc_html(wp_strip_all_tags($result['error']['message'])) ];
     }
     
     if (empty($body) || !is_array($result)) {
