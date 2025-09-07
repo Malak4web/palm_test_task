@@ -9,180 +9,36 @@
 **License:** GPLv2 or later  
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
-AI-powered WordPress plugin for community discussions with Google Gemini 2.0 Flash integration, custom post types, and secure summary generation.
+AI-powered WordPress plugin for community discussions with Google Gemini 2.0 Flash integration.
 
-## 🚀 Features
+## Features
 
-- **Custom Post Type**: Creates "Community Discussions" post type for organizing community content
-- **Real AI Integration**: Generates summaries using Google Gemini 2.0 Flash API (not mock responses)
-- **Meta Box Integration**: Adds a summary meta box to discussion posts with one-click summary generation
-- **AJAX-powered**: Smooth user experience with asynchronous summary generation
-- **Enhanced Security**: Comprehensive security measures including nonce verification, capability checks, input sanitization, and proper output escaping
-- **Admin Settings Panel**: Complete configuration interface for summary length and API key management
-- **Frontend Display**: Automatically displays AI summaries on the frontend with styled presentation
-- **Error Handling**: Robust error handling for API failures and user input validation
-- **WordPress Standards**: Follows WordPress coding standards and best practices with full security compliance
+- **Custom Post Type**: Creates "Community Discussions" post type
+- **AI Integration**: Generates summaries using Google Gemini 2.0 Flash API
+- **Meta Box**: One-click summary generation with AJAX
+- **Admin Settings**: Configure summary length and API key
+- **Frontend Display**: Automatic summary display with styling
+- **Security**: Nonce verification, capability checks, input sanitization
 
-## 📋 Requirements
+## Requirements
 
-- WordPress 5.0 or higher
-- PHP 7.4 or higher
-- Google Gemini API key (get one from [Google AI Studio](https://makersuite.google.com/app/apikey))
-- jQuery (included with WordPress)
-- cURL support (for API communication)
+- WordPress 5.0+
+- PHP 7.4+
+- Google Gemini API key
 
-## 🔧 Installation
+## Installation
 
-1. **Download the plugin** to your WordPress plugins directory:
-   ```
-   wp-content/plugins/palmtest/
-   ```
+1. Download to `wp-content/plugins/palmtest/`
+2. Activate in WordPress admin
+3. Configure API key in Settings > Summary Settings
 
-2. **Activate the plugin** through the WordPress admin panel:
-   - Go to Plugins > Installed Plugins
-   - Find "Palm Test Task" and click "Activate"
+## Usage
 
-3. **Configure API Key**:
-   - Go to Settings > Summary Settings in your WordPress admin
-   - Enter your Google Gemini API key
-   - Set your preferred summary length (10-500 characters)
-   - Click "Save Settings"
+1. Create a new "Community Discussion" post
+2. Click "Generate Summary" in the meta box
+3. Summary appears below the button and on frontend
 
-## 🎯 Usage
-
-### Creating Community Discussions
-
-1. Navigate to **Community Discussions** in your WordPress admin menu
-2. Click **Add New** to create a new discussion
-3. Write your content in the main editor
-4. Use the **Summary** meta box to generate AI-powered summaries
-
-### Generating Summaries
-
-1. In the Summary meta box, click the **"Generate Summary"** button
-2. The plugin will send your content to Google Gemini 2.0 Flash API
-3. A concise summary will be generated and displayed below the button
-4. The summary is automatically saved as post meta and displayed on the frontend
-5. If an error occurs, you'll see a helpful error message
-
-## 🏗️ Project Structure
-
-```
-palmtest/
-├── palmtest.php                    # Main plugin file with CPT registration
-├── includes/
-│   ├── admin_functions.php         # Admin settings and configuration
-│   ├── meta.php                    # Meta box functionality and display
-│   └── summary_provider.php        # AI summary generation logic
-├── assets/
-│   └── js/
-│       └── script.js              # Frontend JavaScript for AJAX calls
-└── README.md                      # This documentation file
-```
-
-## 🔌 Technical Details
-
-### Custom Post Type
-- **Slug**: `discussions`
-- **Public**: Yes
-- **Archive**: Enabled
-- **Rewrite**: `/discussions/`
-
-### API Integration
-- **Service**: Google Gemini 2.0 Flash
-- **Endpoint**: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`
-- **Authentication**: API key in `X-goog-api-key` header
-- **Timeout**: 15 seconds
-- **Error Handling**: Comprehensive error handling for network issues, API errors, and invalid responses
-
-### AJAX Actions
-- **Action**: `wp_ajax_generate_summary`
-- **Data**: `post_id` (POST parameter), `_wpnonce` (security nonce)
-- **Response**: JSON success/error with appropriate messages
-- **Security**: Nonce verification and user capability checks
-
-## 🛠️ Customization
-
-### Modifying the Summary Prompt
-Edit the prompt in `includes/summary_provider.php` line 63:
-```php
-'text' => "Please generate a concise summary of the following content in approximately {$summaryLength} characters. Just return the summary, nothing else. Content: " . $content
-```
-
-### Changing Post Type Labels
-Modify the labels array in `palmtest.php` lines 24-28:
-```php
-$labels = array(
-    'name' => __('Community Discussions', 'palmtest'),
-    'singular_name' => __('Community Discussion', 'palmtest'),
-    'menu_name' => __('Community Discussions', 'palmtest'),
-);
-```
-
-### Updating Default Summary Length
-Change the default length in `palmtest.php` line 17:
-```php
-define('PALM_POST_LENGTH', 150);
-```
-
-## 🔒 Security Considerations
-
-- **Nonce Verification**: WordPress nonces protect against CSRF attacks
-- **Input Validation**: All user inputs are validated and sanitized
-- **Output Escaping**: All outputs are properly escaped with `esc_html()` and `esc_attr()`
-- **Capability Checks**: User permissions are verified before allowing summary generation
-- **API Key Validation**: API keys are validated for proper format and length
-- **SQL Injection Prevention**: Uses WordPress meta functions for safe database operations
-- **XSS Protection**: All user-generated content is sanitized before display
-
-## 📝 Changelog
-
-### Version 1.0.1
-- **Security Updates**: Fixed output escaping issues in admin settings
-- **Code Quality**: Enhanced WordPress coding standards compliance
-- **Documentation**: Updated README with latest security improvements
-
-### Version 1.0.0
-- **Initial release** - Production-ready WordPress plugin
-- **Custom Post Type**: "Community Discussions" with proper labels and settings
-- **Real AI Integration**: Google Gemini 2.0 Flash API integration (not mock)
-- **Meta Box Integration**: One-click summary generation with AJAX
-- **Admin Settings Panel**: Complete configuration interface
-- **Frontend Display**: Automatic summary display with styled presentation
-- **Security Implementation**: Comprehensive security measures
-- **Error Handling**: Robust error handling for all scenarios
-- **WordPress Standards**: Full compliance with WordPress coding standards
-
-## ✅ Current Status & Achievements
-
-This plugin successfully demonstrates **advanced WordPress development skills** and **professional AI integration**. Here's what has been accomplished:
-
-### 🎯 Requirements Fulfillment
-- ✅ **Custom Post Type**: "Community Discussions" properly implemented
-- ✅ **Meta Box with AI Summary Button**: Fully functional with AJAX
-- ✅ **Real AI Integration**: Google Gemini 2.0 Flash API (exceeds mock requirement)
-- ✅ **Meta Data Storage**: Summaries stored and displayed on frontend
-- ✅ **WordPress Hooks**: Proper use of WordPress hooks and filters
-- ✅ **Sanitization & Security**: Comprehensive security implementation
-- ✅ **Admin Interface**: Complete settings panel for configuration
-- ✅ **Error Handling**: Robust error handling throughout
-
-### 🏆 Technical Excellence
-- **Grade: A+** - Production-ready code quality
-- **Security**: Enterprise-level security measures with full output escaping
-- **Architecture**: Clean, scalable, and maintainable code structure
-- **Standards**: Full WordPress coding standards compliance (no linting errors)
-- **User Experience**: Smooth AJAX-powered interface
-- **Documentation**: Comprehensive documentation and comments
-
-### 🚀 Beyond Requirements
-- Real AI API integration instead of mock responses
-- Complete admin settings panel with validation
-- Frontend display with styled presentation
-- Comprehensive error handling and user feedback
-- Professional code organization and structure
-
-## 👨‍💻 Author
+## Author
 
 **Malak Younan**
 - LinkedIn: [Malak4web](https://www.linkedin.com/in/malaak4web/)
@@ -198,4 +54,5 @@ I have developed several WordPress plugins available on the official repository:
 
 ---
 
-**Documentation Note**: This README is maintained and updated to reflect the latest code improvements and security enhancements. The plugin demonstrates authentic WordPress development skills with professional-grade implementation.
+**Documentation Note**: This README was generated and updated with the assistance of AI tools to ensure comprehensive and accurate documentation of the plugin's features and technical implementation.
+
