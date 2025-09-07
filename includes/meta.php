@@ -14,9 +14,9 @@ add_action('add_meta_boxes', 'addSummaryMetaBox');
 
 
 function summaryMetaCB($post) {
-    wp_enqueue_script( 'summary-meta-box-script', plugins_url('/assets/js/script.js', __FILE__), array('jquery'), PALM_VERSION, true );
+    wp_enqueue_script( 'summary-meta-box-script', plugins_url('/assets/js/script.js', __DIR__), array('jquery'), PALM_VERSION, true );
     $nonce = wp_create_nonce('generate_summary_action');
-    $summary = get_post_meta($post->ID, 'summary', true);
+    $summary = get_post_meta($post->ID, 'palmtestSummary', true);
     $o = '<button class="button button-primary" id="generate-summary" data-post-id="' . esc_attr($post->ID) . '" data-nonce="' . esc_attr($nonce) . '">Generate Summary</button>';
     if ($summary) {
         $o .= '<h4>Summary:</h4> <p style="background-color: #f0f0f0; padding: 10px; border-radius: 5px;">' . esc_html($summary) . '</p>';

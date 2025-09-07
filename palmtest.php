@@ -13,12 +13,12 @@ Text Domain: palmtest
 if (!defined('ABSPATH')) {
     exit;
 }
-define('GEMINI_API_KEY', 'AIzaSyB8RB6QHZlpnrpUpoO1uM8IMiaMO9_MjwI');
 define('PALM_VERSION', '1.0.0');
-
+define('PALM_POST_LENGTH', 150);
 // Load required files
 require_once 'includes/meta.php';
 require_once 'includes/summary_provider.php';
+require_once 'includes/admin_functions.php';
 
 function createCPT() {
     $labels = array(
@@ -40,9 +40,16 @@ add_action('init', 'createCPT');
 
 add_filter('the_content', 'addSummaryToContent');
 function addSummaryToContent($content) {
-    $summary = get_post_meta(get_the_ID(), 'summary', true);
+    if (get_post_type() !== 'discussions') {
+        return $content;
+    }
+    
+    $summary = get_post_meta(get_the_ID(), 'palmtestSummary', true);
     if ($summary) {
-        $content .= '<div class="summary">' . esc_html($summary) . '</div>';
+        $content .= '<div class="palmtestSummary" style="background: #f0f8ff; border-left: 4px solid #0073aa; padding: 15px; margin: 20px 0; border-radius: 4px;">
+            <h4 style="margin-top: 0; color: #0073aa;">' . __('AI Summary', 'palmtest') . '</h4>
+            <p style="margin-bottom: 0;">' . esc_html($summary) . '</p>
+        </div>';
     }
     return $content;
 }

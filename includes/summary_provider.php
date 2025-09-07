@@ -33,15 +33,21 @@ function generateSummary() {
     if (isset($summary['error'])) {
         wp_send_json_error($summary['error']);
     }else {
-        update_post_meta($post_id, 'summary', $summary['summary']);
+        update_post_meta($post_id, 'palmtestSummary', $summary['summary']);
     }
     wp_send_json_success('Summary generated successfully');
 }
 add_action('wp_ajax_generate_summary', 'generateSummary');
 
 function getAiSummary($content) {
-
-    $api_key = GEMINI_API_KEY;
+    $api_key = summarySettingsGetApiKey();
+    
+    if (empty($api_key)) {
+        return ['error' => 'API key not configured. Please set your API key in Summary Settings.'];
+    }
+    
+    $summaryLength = summarySettingsGetSummaryLength();
+    
     $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
     $data = array(
@@ -49,7 +55,7 @@ function getAiSummary($content) {
             array(
                 'parts' => array(
                     array(
-                        'text' => "Please generate a summary of the following content: " . $content
+                        'text' => "Please generate a summary of the following content in approximately {$summaryLength} characters and reply only with the summary here's the content: " . $content
                     )
                 )
             )
@@ -75,11 +81,17 @@ function getAiSummary($content) {
     $result = json_decode($body, true);
 
     if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
-        return  [ 'summary' => esc_html($result['candidates'][0]['content']['parts'][0]['text']) ];
+        $content =$result['candidates'][0]['content']['parts'][0]['text'];
+        $content = strip_tags($content);
+        // Truncate summary to summaryLength characters if needed
+        if (mb_strlen($content) > $summaryLength) {
+            $content = mb_substr($content, 0, $summaryLength) . '...';
+        }
+        return [ 'summary' => esc_html($content) ];
     }
 
     if (isset($result['error']['message'])) {
-        return [ 'error' => 'Error: ' . esc_html($result['error']['message']) ];
+        return [ 'error' => 'Error: ' . esc_html(strip_tags($result['error']['message'])) ];
     }
     if (empty($body) || !is_array($result)) {
         return [ 'error' => 'Error: Invalid response from AI service.' ];
