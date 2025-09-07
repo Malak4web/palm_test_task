@@ -7,6 +7,7 @@ Version: 1.0.0
 Author: Malak Younan
 Author URI: https://www.linkedin.com/in/malaak4web/
 License: GPL2
+Text Domain: palmtest
 */
 
 if (!defined('ABSPATH')) {
@@ -21,9 +22,9 @@ require_once 'summary_provider.php';
 
 function createCPT() {
     $labels = array(
-        'name' => 'Community Discussions',
-        'singular_name' => 'Community Discussion',
-        'menu_name' => 'Community Discussions',
+        'name' => __('Community Discussions' , 'palmtest'),
+        'singular_name' => __('Community Discussion' , 'palmtest'),
+        'menu_name' => __('Community Discussions' , 'palmtest'),
     );
     $args = array(
         'labels' => $labels,

@@ -1,4 +1,13 @@
-# Palm Test Task - WordPress Plugin
+# Palm Test Task
+
+**Contributors:** malak4web  
+**Tags:** discussions, community, ai, summary, gemini  
+**Requires at least:** 5.0  
+**Tested up to:** 6.8
+**Requires PHP:** 7.4  
+**Stable tag:** 1.0.0  
+**License:** GPLv2 or later  
+**License URI:** https://www.gnu.org/licenses/gpl-2.0.html  
 
 A WordPress plugin that creates a custom post type for community discussions and provides AI-powered content summarization using Google's Gemini API.
 

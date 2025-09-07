@@ -4,7 +4,7 @@ jQuery('#generate-summary').click(function(e) {
     jQuery.ajax({
         url: ajaxurl,
         type: 'POST',
-        data: {action: 'generate_summary', post_id: post_id},
+        data: {action: 'generate_summary', post_id: post_id, _wpnonce: jQuery(this).data('nonce')},
         success: function(response) {
             if (response.success) {
                 location.reload();

@@ -1,6 +1,11 @@
 <?php 
 
 function generateSummary() {
+    $nonce = isset($_POST['_wpnonce']) ? sanitize_text_field(wp_unslash($_POST['_wpnonce'])) : '';
+    
+    if (!isset($nonce) || !wp_verify_nonce($nonce, 'generate_summary_action')) {
+        wp_send_json_error('Invalid or missing nonce');
+    }
     $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
 
     if (!current_user_can('edit_posts')) {
