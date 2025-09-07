@@ -17,8 +17,8 @@ define('GEMINI_API_KEY', 'AIzaSyB8RB6QHZlpnrpUpoO1uM8IMiaMO9_MjwI');
 define('PALM_VERSION', '1.0.0');
 
 // Load required files
-require_once 'meta.php';
-require_once 'summary_provider.php';
+require_once 'includes/meta.php';
+require_once 'includes/summary_provider.php';
 
 function createCPT() {
     $labels = array(
