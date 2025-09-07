@@ -36,3 +36,14 @@ function createCPT() {
 }
 add_action('init', 'createCPT');
 
+
+
+add_filter('the_content', 'addSummaryToContent');
+function addSummaryToContent($content) {
+    $summary = get_post_meta(get_the_ID(), 'summary', true);
+    if ($summary) {
+        $content .= '<div class="summary">' . esc_html($summary) . '</div>';
+    }
+    return $content;
+}
+

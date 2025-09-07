@@ -30,10 +30,11 @@ function generateSummary() {
         wp_send_json_error('Content not found');
     }
     $summary = getAiSummary($content);
-    if (empty($summary)) {
-        wp_send_json_error('Summary not generated');
+    if (isset($summary['error'])) {
+        wp_send_json_error($summary['error']);
+    }else {
+        update_post_meta($post_id, 'summary', $summary['summary']);
     }
-    update_post_meta($post_id, 'summary', $summary);
     wp_send_json_success('Summary generated successfully');
 }
 add_action('wp_ajax_generate_summary', 'generateSummary');
@@ -67,15 +68,22 @@ function getAiSummary($content) {
     $response = wp_remote_post($url, $args);
 
     if (is_wp_error($response)) {
-        return 'Error: Unable to connect to AI service.';
+        return [ 'error' => 'Error: Unable to connect to AI service.' ];
     }
 
     $body = wp_remote_retrieve_body($response);
     $result = json_decode($body, true);
 
     if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
-        return  esc_html($result['candidates'][0]['content']['parts'][0]['text']);
+        return  [ 'summary' => esc_html($result['candidates'][0]['content']['parts'][0]['text']) ];
     }
 
-    return  esc_html(substr($content, 0, 100) .'....');
+    if (isset($result['error']['message'])) {
+        return [ 'error' => 'Error: ' . esc_html($result['error']['message']) ];
+    }
+    if (empty($body) || !is_array($result)) {
+        return [ 'error' => 'Error: Invalid response from AI service.' ];
+    }
+
+    return [ 'error' => 'Error: Invalid response from AI service.' ];
 }
