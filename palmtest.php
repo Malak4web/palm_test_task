@@ -20,6 +20,7 @@ require_once 'includes/meta.php';
 require_once 'includes/summary_provider.php';
 require_once 'includes/admin_functions.php';
 
+// Set up the custom post type for community discussions
 function createCPT() {
     $labels = array(
         'name' => __('Community Discussions' , 'palmtest'),
@@ -40,12 +41,14 @@ add_action('init', 'createCPT');
 
 add_filter('the_content', 'addSummaryToContent');
 function addSummaryToContent($content) {
+    // Only show summary for discussion posts
     if (get_post_type() !== 'discussions') {
         return $content;
     }
     
     $summary = get_post_meta(get_the_ID(), 'palmtestSummary', true);
     if ($summary) {
+        // Display the AI summary with some nice styling
         $content .= '<div class="palmtestSummary" style="background: #f0f8ff; border-left: 4px solid #0073aa; padding: 15px; margin: 20px 0; border-radius: 4px;">
             <h4 style="margin-top: 0; color: #0073aa;">' . __('AI Summary', 'palmtest') . '</h4>
             <p style="margin-bottom: 0;">' . esc_html($summary) . '</p>

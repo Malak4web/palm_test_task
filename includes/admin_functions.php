@@ -52,7 +52,7 @@ function summarySettingsSummaryLengthCallback() {
     $options = get_option('palmtestOptions');
     $length = isset($options['summaryLength']) ? $options['summaryLength'] : PALM_POST_LENGTH;
     
-    echo '<input type="number" id="summaryLength" name="palmtestOptions[summaryLength]" value="' . esc_attr($length) . '" min="10"  class="regular-text" />';
+    echo '<input type="number" id="summaryLength" name="palmtestOptions[summaryLength]" value="' . esc_attr($length) . '" min="50"  class="regular-text" />';
 }
 
 
@@ -68,9 +68,10 @@ function summarySettingsApiKeyCallback() {
 function summarySettingsValidateOptions($input) {
     $output = array();
     
+    // Validate summary length - found 50+ chars works best
     if (isset($input['summaryLength'])) {
         $length = intval($input['summaryLength']);
-        if ($length >= 10 && $length <= 500) {
+        if ($length >= 50) {
             $output['summaryLength'] = $length;
         } else {
             add_settings_error('palmtestOptions', 'invalidLength', __('Summary length must be between 10 and 500 characters.', 'palmtest'));
@@ -83,7 +84,7 @@ function summarySettingsValidateOptions($input) {
     if (isset($input['apiKey'])) {
         $apiKey = sanitize_text_field($input['apiKey']);
         if (!empty($apiKey)) {
-            if (strpos($apiKey, 'AIza') === 0 && strlen($apiKey) > 30) {
+            if (strlen($apiKey) > 30) {
                 $output['apiKey'] = $apiKey;
             } else {
                 add_settings_error('palmtestOptions', 'invalidApiKey', __('Invalid API key format. Please enter a valid Google Gemini API key.', 'palmtest'));

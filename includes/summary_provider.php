@@ -1,6 +1,7 @@
 <?php 
 
 function generateSummary() {
+    // Security first - always verify nonces for AJAX calls
     $nonce = isset($_POST['_wpnonce']) ? sanitize_text_field(wp_unslash($_POST['_wpnonce'])) : '';
     
     if (!isset($nonce) || !wp_verify_nonce($nonce, 'generate_summary_action')) {
@@ -29,10 +30,13 @@ function generateSummary() {
     if (empty($content)) {
         wp_send_json_error('Content not found');
     }
+    
+    // Call the AI service - Worked with Gemini before, so I'll use it again
     $summary = getAiSummary($content);
     if (isset($summary['error'])) {
         wp_send_json_error($summary['error']);
-    }else {
+    } else {
+        // Store the summary as post meta for frontend display
         update_post_meta($post_id, 'palmtestSummary', $summary['summary']);
     }
     wp_send_json_success('Summary generated successfully');
@@ -50,12 +54,13 @@ function getAiSummary($content) {
     
     $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
+    // Craft the prompt - found this works better than asking for exact character count
     $data = array(
         'contents' => array(
             array(
                 'parts' => array(
                     array(
-                        'text' => "Please generate a summary of the following content in approximately {$summaryLength} characters and reply only with the summary here's the content: " . $content
+                        'text' => "Please generate a concise summary of the following content in approximately {$summaryLength} characters. Just return the summary, nothing else. Content: " . $content
                     )
                 )
             )
@@ -80,21 +85,18 @@ function getAiSummary($content) {
     $body = wp_remote_retrieve_body($response);
     $result = json_decode($body, true);
 
-    if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
-        $content =$result['candidates'][0]['content']['parts'][0]['text'];
-        $content = strip_tags($content);
-        // Truncate summary to summaryLength characters if needed
-        if (mb_strlen($content) > $summaryLength) {
-            $content = mb_substr($content, 0, $summaryLength) . '...';
-        }
-        return [ 'summary' => esc_html($content) ];
-    }
-
+    // Handle API errors - Gemini usually gives good error messages
     if (isset($result['error']['message'])) {
         return [ 'error' => 'Error: ' . esc_html(strip_tags($result['error']['message'])) ];
     }
+    
     if (empty($body) || !is_array($result)) {
         return [ 'error' => 'Error: Invalid response from AI service.' ];
+    }
+
+    if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
+        $summary = $result['candidates'][0]['content']['parts'][0]['text'] ?? '';
+        return ['summary' => wp_trim_words($summary, $summaryLength)];
     }
 
     return [ 'error' => 'Error: Invalid response from AI service.' ];
